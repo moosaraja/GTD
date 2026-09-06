@@ -17,8 +17,6 @@ Multi-user with admin controls, dark mode, and a clean gradient UI.
 
 > **Author & Developer:** [Moosa Raja](https://github.com/moosaraja)
 
----
-
 ## ✨ Features
 
 ### 🔄 The Complete GTD Workflow
@@ -31,15 +29,13 @@ Multi-user with admin controls, dark mode, and a clean gradient UI.
 | **Do** | 📍 Context filters | *"I'm at @home with 30 min — what can I do right now?"* |
 | **Review** | 🔍 Weekly dashboard | Inbox status, overdue items, stuck projects, loose ends, waiting-for follow-ups |
 
-### ⚙️ The Process Decision Tree
-
 ### ⚙️ The Process Decision Tree (Text Edition)
 
 Process every inbox item **top-down**, one at a time — never put it back.
 
 | # | Question | Yes → Do this | No → Next question |
 |---|----------|---------------|---------------------|
-| 1 | **Is it actionable?** | → **2** | **Trash** / **Someday/Maybe** / **Reference** |
+| 1 | **Is it actionable?**  | **Trash** / **Someday/Maybe** / **Reference** | → **2** |
 | 2 | **Can you do it in < 2 min?** | **Do it now** ✅ | → **3** |
 | 3 | **Should you delegate it?** | **Waiting For** 🤝 | → **4** |
 | 4 | **Does it have a specific date/time?** | **Calendar** 📅 | → **5** |
@@ -80,8 +76,6 @@ Process every inbox item **top-down**, one at a time — never put it back.
 | Auth | Session-based with `before_request` login wall |
 
 ---
-
-## 📁 Project Structure
 
 ## 📁 Project Structure
 
