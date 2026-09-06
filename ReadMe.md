@@ -33,18 +33,19 @@ Multi-user with admin controls, dark mode, and a clean gradient UI.
 
 ### ⚙️ The Process Decision Tree
 
-Every inbox item is processed one-at-a-time, exactly per the GTD flowchart:
+### ⚙️ The Process Decision Tree (Text Edition)
 
-flowchart TD
-    A["📥 Stuff in Inbox"] --> B{"Is it actionable?"}
-    B -- NO --> C["🗑 Eliminate → Trash"]
-    B -- NO --> D["☁ Incubate → Someday/Maybe"]
-    B -- NO --> E["📁 Reference"]
-    B -- YES --> F["⚡ Do it (< 2 min)"] --> G["✅ Done"]
-    B -- YES --> H["🤝 Delegate it"] --> I["🤝 Waiting For"]
-    B -- YES --> J["📅 Defer (specific day)"] --> K["📅 Calendar"]
-    B -- YES --> L["➡ Defer (anytime)"] --> M["➡ Next Action + context"]
-    B -- YES --> N["📋 Multi-step?"] --> O["📋 Project + outcome"]
+Process every inbox item **top-down**, one at a time — never put it back.
+
+| # | Question | Yes → Do this | No → Next question |
+|---|----------|---------------|---------------------|
+| 1 | **Is it actionable?** | → **2** | **Trash** / **Someday/Maybe** / **Reference** |
+| 2 | **Can you do it in < 2 min?** | **Do it now** ✅ | → **3** |
+| 3 | **Should you delegate it?** | **Waiting For** 🤝 | → **4** |
+| 4 | **Does it have a specific date/time?** | **Calendar** 📅 | → **5** |
+| 5 | **Is it a multi-step outcome?** | **Project** 📋 + **Next Action** ➡ | **Next Action** ➡ + **@context** |
+
+> **Golden rule:** Once processed, the item **never returns to the Inbox**.
     
 ### 👤 Multi-User System
 
@@ -82,24 +83,26 @@ flowchart TD
 
 ## 📁 Project Structure
 
-gtd-app/
-├── app.py                  # Flask app — all routes & business logic
-├── db.py                   # PostgreSQL helpers (fetch_all / fetch_one / execute)
-├── schema.sql              # Core tables: items, projects, contexts
-├── schema_users.sql        # Multi-user upgrade: users table + user_id columns
-├── create_admin.py         # One-time script: create the first admin account
-├── requirements.txt        # Python dependencies
-└── templates/
-    ├── base.html           # Shared layout, nav bar, dark theme
-    ├── login.html          # Standalone login page
-    ├── register.html       # Standalone registration page
-    ├── inbox.html          # Collect phase
-    ├── process.html        # Process phase (decision tree)
-    ├── list.html           # Generic list page (all statuses + context filter)
-    ├── projects.html       # Projects with outcomes & actions
-    ├── review.html         # Weekly review dashboard
-    ├── edit.html           # Edit & move item form
-    └── admin.html          # Admin user management
+## 📁 Project Structure
+
+| Path | Purpose |
+|------|---------|
+| `app.py` | Flask application — all routes & business logic |
+| `db.py` | PostgreSQL helpers (`fetch_all`, `fetch_one`, `execute`) |
+| `schema.sql` | Core tables: `items`, `projects`, `contexts` |
+| `schema_users.sql` | Multi-user upgrade: `users` table + `user_id` FKs |
+| `create_admin.py` | One-time script to bootstrap the first admin |
+| `requirements.txt` | Python dependencies |
+| `templates/` | Jinja2 templates (see below) |
+| &nbsp;&nbsp;`├── base.html` | Shared layout, navbar, dark-mode toggle |
+| &nbsp;&nbsp;`├── login.html` / `register.html` | Auth pages |
+| &nbsp;&nbsp;`├── inbox.html` | **Collect** phase |
+| &nbsp;&nbsp;`├── process.html` | **Process** phase (decision wizard) |
+| &nbsp;&nbsp;`├── list.html` | Generic list (all statuses + context filter) |
+| &nbsp;&nbsp;`├── projects.html` | Projects with outcomes & actions |
+| &nbsp;&nbsp;`├── review.html` | **Weekly Review** dashboard |
+| &nbsp;&nbsp;`├── edit.html` | Edit / move item form |
+| &nbsp;&nbsp;`└── admin.html` | Admin user-management panel |
 
 
 
@@ -116,17 +119,28 @@ gtd-app/
 | `projects` | Multi-step outcomes | name, outcome, status (active/completed), user_id |
 | `contexts` | @where/@how labels | name, user_id (unique per user) |
 
-### Item Status Flow
+### 🗄 Item Status Flow
 
+| From Status | Trigger / Action | To Status |
+|-------------|------------------|-----------|
+| `inbox` | Process → Actionable, < 2 min | `done` |
+| `inbox` | Process → Actionable, delegate | `waiting_for` |
+| `inbox` | Process → Actionable, specific date | `scheduled` |
+| `inbox` | Process → Actionable, anytime | `next_action` |
+| `inbox` | Process → Actionable, multi-step | `next_action` + `project` |
+| `inbox` | Process → Incubate | `someday_maybe` |
+| `inbox` | Process → Reference | `reference` |
+| `inbox` | Process → Trash | `trash` |
+| `next_action` | Complete | `done` |
+| `next_action` | Set due date/time | `scheduled` |
+| `next_action` | Delegate | `waiting_for` |
+| `next_action` | Defer indefinitely | `someday_maybe` |
+| `scheduled` | Date arrives / Reschedule | `next_action` |
+| `waiting_for` | Returned / Followed up | `next_action` |
+| `someday_maybe` | Promote to active | `next_action` |
+| `trash` | **Empty Trash** | *permanently deleted* |
 
-inbox ──→ next_action ──→ done
-  │          │
-  │          ├── scheduled (Calendar, due_date)
-  │          ├── waiting_for (delegated_to)
-  │          ├── someday_maybe
-  │          ├── reference
-  │          └── trash ──→ (Empty Trash = permanent)
-  └──→ (processed one at a time, never back in)
+> **Rule:** Items flow **forward only** — they never return to `inbox` once processed.
 
 
   
