@@ -26,16 +26,17 @@ Multi-user with admin controls, dark mode, and a clean gradient UI.
 
 Every inbox item is processed one-at-a-time, exactly per the GTD flowchart:
 
-                   ┌─ NO ──→ 🗑 Eliminate (Trash)
-Is it actionable? ─────┤        ├─ ☁ Incubate (Someday/Maybe)
-                       │        └─ 📁 Reference
-                       │
-                       └─ YES ─→ ⚡ Do it (< 2 min) ──→ Done
-                                ├─ 🤝 Delegate it ──→ Waiting For (who?)
-                                ├─ 📅 Defer it (specific day) ──→ Calendar
-                                ├─ ➡ Defer it (anytime) ──→ Next Action (+ context)
-                                └─ 📋 Multi-step? ──→ Project (outcome + first action)
-
+flowchart TD
+    A["📥 Stuff in Inbox"] --> B{"Is it actionable?"}
+    B -- NO --> C["🗑 Eliminate → Trash"]
+    B -- NO --> D["☁ Incubate → Someday/Maybe"]
+    B -- NO --> E["📁 Reference"]
+    B -- YES --> F["⚡ Do it (< 2 min)"] --> G["✅ Done"]
+    B -- YES --> H["🤝 Delegate it"] --> I["🤝 Waiting For"]
+    B -- YES --> J["📅 Defer (specific day)"] --> K["📅 Calendar"]
+    B -- YES --> L["➡ Defer (anytime)"] --> M["➡ Next Action + context"]
+    B -- YES --> N["📋 Multi-step?"] --> O["📋 Project + outcome"]
+    
 ### 👤 Multi-User System
 
 - **Open registration** — new users get 6 default contexts auto-seeded (@office, @home, @computer, @phone, @errands, @anywhere)
