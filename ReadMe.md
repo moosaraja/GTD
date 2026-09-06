@@ -1,3 +1,12 @@
+The Process Decision Tree
+Project Structure
+Item Status Flow
+
+
+i need this in a good different way. its not yet fixed. Or may be you can give me good corrected format
+The existing format is not looking good
+
+--- Attached File: ReadMe.md ---
 # 🎯 GTD Web App
 
 A full-stack **Getting Things Done (GTD)** task management application built with
@@ -247,4 +256,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
