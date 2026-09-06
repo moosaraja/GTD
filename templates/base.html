@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}GTD App{% endblock %}</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+            background: #f4f5f7;
+            color: #2d3436;
+        }
+        nav {
+            background: #2c3e50;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        nav .brand {
+            color: #fff;
+            font-weight: bold;
+            font-size: 18px;
+            padding: 16px 16px 16px 0;
+        }
+        nav a {
+            color: #bdc3c7;
+            text-decoration: none;
+            padding: 16px 14px;
+            display: inline-block;
+        }
+        nav a:hover { color: #fff; }
+        nav a.active { color: #fff; border-bottom: 3px solid #3498db; }
+        .container { max-width: 760px; margin: 32px auto; padding: 0 16px; }
+        h1 { margin-bottom: 4px; }
+        .subtitle { color: #7f8c8d; margin-bottom: 24px; }
+        .badge {
+            background: #e74c3c; color: #fff; border-radius: 12px;
+            font-size: 13px; padding: 2px 10px; vertical-align: middle;
+        }
+        .card {
+            background: #fff; border-radius: 8px; padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 24px;
+        }
+        input[type="text"], textarea {
+            width: 100%; padding: 10px; margin-bottom: 10px;
+            border: 1px solid #dcdfe4; border-radius: 6px; font-size: 15px;
+        }
+        textarea { height: 60px; resize: vertical; }
+        .btn {
+            background: #3498db; color: #fff; border: none; border-radius: 6px;
+            padding: 10px 18px; font-size: 15px; cursor: pointer;
+        }
+        .btn:hover { background: #2980b9; }
+        .btn-link {
+            background: none; color: #e74c3c; border: none;
+            cursor: pointer; font-size: 14px; padding: 4px 8px;
+        }
+        .btn-link:hover { text-decoration: underline; }
+        ul.item-list { list-style: none; }
+        ul.item-list li {
+            background: #fff; border-radius: 8px; padding: 14px 18px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            margin-bottom: 10px; display: flex;
+            justify-content: space-between; align-items: center; gap: 12px;
+        }
+        .item-title { font-weight: 600; }
+        .item-notes { color: #7f8c8d; font-size: 14px; margin-top: 2px; }
+        .item-date { color: #b2bec3; font-size: 12px; margin-top: 4px; }
+        .empty {
+            text-align: center; color: #95a5a6; padding: 40px;
+            background: #fff; border-radius: 8px;
+        }
+    </style>
+</head>
+<body data-endpoint="{{ request.endpoint }}">
+        <nav>
+        <span class="brand">GTD</span>
+        <a href="{{ url_for('inbox') }}">Inbox</a>
+        <a href="{{ url_for('process') }}">Process</a>
+        <a href="{{ url_for('projects_view') }}">Projects</a>
+        <a href="{{ url_for('review') }}">Review</a>
+        <a href="{{ url_for('list_view', status='next_action') }}">Next Actions</a>
+        <a href="{{ url_for('list_view', status='scheduled') }}">Calendar</a>
+        <a href="{{ url_for('list_view', status='waiting_for') }}">Waiting For</a>
+        <a href="{{ url_for('list_view', status='someday_maybe') }}">Someday</a>
+        <a href="{{ url_for('list_view', status='reference') }}">Reference</a>
+        <a href="{{ url_for('list_view', status='trash') }}">Trash</a>
+    </nav>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+        <script>
+        // highlight the nav link matching the current page
+        const ep = document.body.dataset.endpoint;
+        document.querySelectorAll("nav a").forEach(a => {
+            if (a.href.includes("/" + ep) && !a.href.includes("status=")) {
+                a.classList.add("active");
+            }
+        });
+        // list pages: highlight by status in the URL
+        const params = new URLSearchParams(window.location.search);
+        const ctx = params.get("context");
+        document.querySelectorAll("nav a").forEach(a => {
+            if (a.href.includes("status=") && window.location.pathname.includes(a.href.split("status=")[1].split("&")[0])
+                && (a.href.includes("context=" + ctx) || !a.href.includes("context="))) {
+                a.classList.add("active");
+            }
+        });
+    </script>
+</body>
+</html>
